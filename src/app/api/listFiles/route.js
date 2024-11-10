@@ -1,4 +1,4 @@
-import { DdcClient, MAINNET, JsonSigner } from '@cere-ddc-sdk/ddc-client';
+import { DdcClient, MAINNET, JsonSigner, FileUri } from '@cere-ddc-sdk/ddc-client';
 import { NextResponse } from 'next/server';
 import * as fs from 'fs';
 import path from 'path';
@@ -26,22 +26,27 @@ export async function GET() {
     const jsonSigner = new JsonSigner(keyringPair, { passphrase: accountPassphrase });
     const client = await DdcClient.create(jsonSigner, MAINNET);
 
+    console.log("working as expected till there");
+
     // Get all files in the specified bucket
-    // const uri = new FileUri(bucketId, "baebb4ifhm63xuerpkb5fjmwtytaf4sfd3jplqdpwljyrt4rtdzkectn36y");
-    //
-    // const fileResponse = await ddcClient.read(uri);
-    // const content = await fileResponse.arrayBuffer();
-    //
-    // console.log(content);
+    const uri = new FileUri(bucketId, "baebb4ifhm63xuerpkb5fjmwtytaf4sfd3jplqdpwljyrt4rtdzkectn36y");
+
+    const fileResponse = await client.read(uri);
+    const content = await fileResponse.arrayBuffer();
+
+    console.log("recieved the file till there");
+
+
+    console.log(content);
 
     // Disconnect the DDC client
     await client.disconnect();
 
-    // Format URLs for each file in the bucket
-    const fileUrls = files.map(file => ({
-      cid: file.cid,
-      url: `https://storage.dragon.cere.network/${bucketId}/${file.cid}`,
-    }));
+    // // Format URLs for each file in the bucket
+    // const fileUrls = files.map(file => ({
+    //   cid: file.cid,
+    //   url: `https://storage.dragon.cere.network/${bucketId}/${file.cid}`,
+    // }));
 
     return new NextResponse(JSON.stringify({ files: fileUrls }), {
       status: 200,
