@@ -48,7 +48,7 @@ export async function GET() {
     //   url: `https://storage.dragon.cere.network/${bucketId}/${file.cid}`,
     // }));
 
-    return new NextResponse(JSON.stringify({ files: fileUrls }), {
+    return new NextResponse(JSON.stringify({ files: content }), {
       status: 200,
       headers: { 'Content-Type': 'application/json' },
     });
