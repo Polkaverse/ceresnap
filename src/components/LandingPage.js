@@ -21,7 +21,7 @@ export default function LandingPage() {
                     <div className="hidden sm:mb-8 sm:flex sm:justify-center">
                         <div className="relative rounded-full px-3 py-1 text-sm/6 text-gray-600 ring-1 ring-gray-900/10 hover:ring-gray-900/20">
                             Announcing our new AI Tool.{' '}
-                            <Link href="#" className="font-semibold text-indigo-600">
+                            <Link href="https://docs.google.com/document/d/1gDNPRboY8sR8FUQNqRg12WVJ_leP8yxAX56-IEg7qt8/edit?tab=t.0" className="font-semibold text-indigo-600">
                                 <span aria-hidden="true" className="absolute inset-0" />
                                 Read more <span aria-hidden="true">&rarr;</span>
                             </Link>
@@ -40,7 +40,7 @@ export default function LandingPage() {
                         >
                             Get started
                         </Link>
-                        <Link href="#" className="text-sm/6 font-semibold text-gray-900">
+                        <Link href="https://docs.google.com/document/d/1gDNPRboY8sR8FUQNqRg12WVJ_leP8yxAX56-IEg7qt8/edit?tab=t.0" className="text-sm/6 font-semibold text-gray-900">
                             Learn more <span aria-hidden="true">→</span>
                         </Link>
                     </div>
