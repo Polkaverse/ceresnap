@@ -17,10 +17,13 @@ export default function ListFiles() {
     { cid: 'baebb4idnld3hxo77rn3zh7lqafppqgbumllaginotmssizn7dsdd624u2i', url: 'https://storage.dragon.cere.network/1095/baebb4idnld3hxo77rn3zh7lqafppqgbumllaginotmssizn7dsdd624u2i' },
     { cid: 'baebb4ied5v46uekrcznf3rcgvwqtjls3otmo4iaemkpwhvf4kduntxheuq', url: 'https://storage.dragon.cere.network/1095/baebb4ied5v46uekrcznf3rcgvwqtjls3otmo4iaemkpwhvf4kduntxheuq' },
     { cid: 'baebb4ifhm63xuerpkb5fjmwtytaf4sfd3jplqdpwljyrt4rtdzkectn36y', url: 'https://storage.dragon.cere.network/1095/baebb4ifhm63xuerpkb5fjmwtytaf4sfd3jplqdpwljyrt4rtdzkectn36y' },
+    { cid: 'baebb4ihnkcalnlpjjlevjrlanm562lvyo3et5ny53mnvgilndio2u572ga', url: 'https://storage.dragon.cere.network/1095/baebb4ihnkcalnlpjjlevjrlanm562lvyo3et5ny53mnvgilndio2u572ga' },
+    { cid: 'baebb4iezst3t6pvzfsimpxbmdibafxw22x25i22jjlovhslwx5evojqhh4', url: 'https://storage.dragon.cere.network/1095/baebb4iezst3t6pvzfsimpxbmdibafxw22x25i22jjlovhslwx5evojqhh4' },
+    { cid: 'baebb4ihqzxhy35saxisgc7fhjoubzldvsbttmkroqewxfmwahwd7aqkw4y', url: 'https://storage.dragon.cere.network/1095/baebb4ihqzxhy35saxisgc7fhjoubzldvsbttmkroqewxfmwahwd7aqkw4y' },
   ];
 
   return (
-      <div className="h-screen overflow-hidden bg-white flex items-center justify-center">
+      <div className="min-h-screen overflow-hidden bg-white flex items-center justify-center">
         <div className="relative isolate px-6 py-14 lg:px-8 w-full h-full flex items-center justify-center flex-col">
           <div
               aria-hidden="true"
@@ -34,21 +37,28 @@ export default function ListFiles() {
                 className="relative left-[calc(50%-11rem)] aspect-[1155/678] w-[36.125rem] -translate-x-1/2 rotate-[30deg] bg-gradient-to-tr from-[#ff80b5] to-[#9089fc] opacity-30 sm:left-[calc(50%-30rem)] sm:w-[72.1875rem]"
             />
           </div>
-          <div className="mx-auto mt-10 mb-auto max-w-lg rounded-lg bg-white p-5 shadow-md">
-            <h2 className="text-lg text-black font-medium mb-5">Gallery Photos</h2>
-            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+          <div className="pb-16">
+            <h2 className="font-manrope w-full pb-2.5 text-center text-4xl font-bold leading-loose text-gray-900">Our Gallery</h2>
+            <p className="w-full text-center text-lg font-normal leading-8 text-gray-600">Explore our gallery's intimate space.</p>
+          </div>
+
+          {/* Main Gallery Container */}
+          <div className="mx-auto  max-w-full rounded-lg  p-5 shadow-md ">
+            {/* <h2 className="text-lg text-black font-medium mb-5">Gallery Photos</h2> */}
+            <div className="grid grid-cols-6 gap-4">
               {files.map((file) => (
                   <div key={file.cid} className="border rounded-lg overflow-hidden shadow-sm">
                     <img
                         src={file.url}
                         alt={`CID: ${file.cid}`}
-                        className="object-cover w-full h-48"
+                        className="object-cover w-full aspect-square"
                     />
                     <p className="p-2 text-center text-gray-500 text-xs">CID: {file.cid}</p>
                   </div>
               ))}
             </div>
           </div>
+
           <div
               aria-hidden="true"
               className="absolute inset-x-0 top-[calc(100%-13rem)] -z-10 transform-gpu overflow-hidden blur-3xl sm:top-[calc(100%-30rem)]"
@@ -63,5 +73,6 @@ export default function ListFiles() {
           </div>
         </div>
       </div>
+
   );
 }
