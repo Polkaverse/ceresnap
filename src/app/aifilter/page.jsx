@@ -94,9 +94,16 @@ function Gallery() {
 
     const getCategory = (predictions) => {
         const labels = predictions.map((pred) => pred.className.toLowerCase());
-        if (labels.some((label) => label.includes('nature'))) return 'nature';
-        if (labels.some((label) => label.includes('portrait'))) return 'portrait';
-        if (labels.some((label) => label.includes('party'))) return 'party';
+
+        if (labels.some((label) => label.includes('nature') || label.includes('valley') || label.includes('mountain') || label.includes('alp') || label.includes('lakeside'))) {
+            return 'nature';
+        }
+        if (labels.some((label) => label.includes('portrait') || label.includes('person') || label.includes('face') || label.includes('cap'))) {
+            return 'portrait';
+        }
+        if (labels.some((label) => label.includes('party') || label.includes('celebration') || label.includes('event') || label.includes('concert') || label.includes('stage'))) {
+            return 'party';
+        }
         return 'others';
     };
 
