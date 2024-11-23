@@ -1,36 +1,104 @@
-"use client"
-import { useState } from 'react';
-
-const images = {
-    portrait: [
-        { cid: 'baebb4icnjdjtieqywsxjgx6clu4jh7xwdyhroxybuhrsfea54fmf4o54za', url: 'https://storage.dragon.cere.network/1095/baebb4icnjdjtieqywsxjgx6clu4jh7xwdyhroxybuhrsfea54fmf4o54za' },
-        { cid: 'baebb4iefljk6hmv34sv772cppztiewwdulpufmjrjcx2ec5jtkphe6nu4a', url: 'https://storage.dragon.cere.network/1095/baebb4iefljk6hmv34sv772cppztiewwdulpufmjrjcx2ec5jtkphe6nu4a' },
-        { cid: 'baebb4if563jxj4rhuxw6zp76owmqhhkkgy5gyf2um4l3lidgrdh3qyp5fm', url: 'https://storage.dragon.cere.network/1095/baebb4if563jxj4rhuxw6zp76owmqhhkkgy5gyf2um4l3lidgrdh3qyp5fm' },
-        { cid: 'baebb4ifveymnitglssdrsve53ci4d6xkg4uwzhf7xldvlknvbrpoo6fwgm', url: 'https://storage.dragon.cere.network/1095/baebb4ifveymnitglssdrsve53ci4d6xkg4uwzhf7xldvlknvbrpoo6fwgm' },
-        { cid: 'baebb4igwx5mz3hdtbbl2lekbq2hq3luwsnir3u2ehlgkjldqt4fpzvr2ky', url: 'https://storage.dragon.cere.network/1095/baebb4igwx5mz3hdtbbl2lekbq2hq3luwsnir3u2ehlgkjldqt4fpzvr2ky' },
-        { cid: 'baebb4if4rm52u4qnrpeaovtnvbjuehorx55zbi4khyl6hwikzfeb4m3nx4', url: 'https://storage.dragon.cere.network/1095/baebb4if4rm52u4qnrpeaovtnvbjuehorx55zbi4khyl6hwikzfeb4m3nx4' },
-        { cid: 'baebb4igrx35ooybn4sstu6l3dwwjyhzt74sdk7o4kfu6gn2wu4ajrujvra', url: 'https://storage.dragon.cere.network/1095/baebb4igrx35ooybn4sstu6l3dwwjyhzt74sdk7o4kfu6gn2wu4ajrujvra' },
-        { cid: 'baebb4ib4rc4trof5mllg5yda4nkj4y5kmglelg35javhibwdh6eatcg4zu', url: 'https://storage.dragon.cere.network/1095/baebb4ib4rc4trof5mllg5yda4nkj4y5kmglelg35javhibwdh6eatcg4zu' },
-    ],
-    nature: [
-        { cid: 'baebb4icqjkxtvgb3oc6c3urlvjkdyrbdrbuodhqcutfn7hm3t3ixznx74q', url: 'https://storage.dragon.cere.network/1095/baebb4icqjkxtvgb3oc6c3urlvjkdyrbdrbuodhqcutfn7hm3t3ixznx74q' },
-        { cid: 'baebb4ifsywdnbplandapvhinxzycsc524xk2czcbfzeazkwvzrm36akk6u', url: 'https://storage.dragon.cere.network/1095/baebb4ifsywdnbplandapvhinxzycsc524xk2czcbfzeazkwvzrm36akk6u' },
-        { cid: 'baebb4iasav2ebadvlxe3iwxcw3gziuvggtgxujgsrfpwbt43nqt3nbwps4', url: 'https://storage.dragon.cere.network/1095/baebb4iasav2ebadvlxe3iwxcw3gziuvggtgxujgsrfpwbt43nqt3nbwps4' },
-        { cid: 'baebb4idnld3hxo77rn3zh7lqafppqgbumllaginotmssizn7dsdd624u2i', url: 'https://storage.dragon.cere.network/1095/baebb4idnld3hxo77rn3zh7lqafppqgbumllaginotmssizn7dsdd624u2i' },
-        { cid: 'baebb4ied5v46uekrcznf3rcgvwqtjls3otmo4iaemkpwhvf4kduntxheuq', url: 'https://storage.dragon.cere.network/1095/baebb4ied5v46uekrcznf3rcgvwqtjls3otmo4iaemkpwhvf4kduntxheuq' },
-        { cid: 'baebb4ifhm63xuerpkb5fjmwtytaf4sfd3jplqdpwljyrt4rtdzkectn36y', url: 'https://storage.dragon.cere.network/1095/baebb4ifhm63xuerpkb5fjmwtytaf4sfd3jplqdpwljyrt4rtdzkectn36y' },
-    ],
-    party: [
-        { cid: 'baebb4ihnkcalnlpjjlevjrlanm562lvyo3et5ny53mnvgilndio2u572ga', url: 'https://storage.dragon.cere.network/1095/baebb4ihnkcalnlpjjlevjrlanm562lvyo3et5ny53mnvgilndio2u572ga' },
-        { cid: 'baebb4iezst3t6pvzfsimpxbmdibafxw22x25i22jjlovhslwx5evojqhh4', url: 'https://storage.dragon.cere.network/1095/baebb4iezst3t6pvzfsimpxbmdibafxw22x25i22jjlovhslwx5evojqhh4' },
-        { cid: 'baebb4ihqzxhy35saxisgc7fhjoubzldvsbttmkroqewxfmwahwd7aqkw4y', url: 'https://storage.dragon.cere.network/1095/baebb4ihqzxhy35saxisgc7fhjoubzldvsbttmkroqewxfmwahwd7aqkw4y' },
-        // Add other party images here
-
-    ],
-};
+"use client";
+import { useState, useEffect } from 'react';
+import * as mobilenet from '@tensorflow-models/mobilenet';
+import '@tensorflow/tfjs';
 
 function Gallery() {
+    const [files, setFiles] = useState([]);
+    const [isLoading, setIsLoading] = useState(true);
+    const [model, setModel] = useState(null);
+    const [categories, setCategories] = useState({});
     const [activeCategory, setActiveCategory] = useState(null);
+
+    useEffect(() => {
+        async function fetchUrls() {
+            try {
+                const response = await fetch('/api/get-urls');
+                const data = await response.json();
+                console.log('Fetched URLs:', data); // Debug log
+                setFiles(data);
+            } catch (error) {
+                console.error('Error fetching URLs:', error);
+            } finally {
+                setIsLoading(false);
+            }
+        }
+
+        async function loadModel() {
+            // Suppress TensorFlow.js warnings
+            const originalWarn = console.warn;
+            console.warn = function (message) {
+                if (message.startsWith('The kernel')) {
+                    return;
+                }
+                originalWarn.apply(console, arguments);
+            };
+
+            try {
+                const loadedModel = await mobilenet.load();
+                console.log('Model loaded'); // Debug log
+                setModel(loadedModel);
+            } catch (error) {
+                console.error('Error loading model:', error);
+            } finally {
+                // Restore original console.warn
+                console.warn = originalWarn;
+            }
+        }
+
+        fetchUrls();
+        loadModel();
+    }, []);
+
+    useEffect(() => {
+        if (files.length > 0 && model) {
+            classifyImages();
+        }
+    }, [files, model]);
+
+    const classifyImages = async () => {
+        const newCategories = {
+            nature: [],
+            portrait: [],
+            party: [],
+            others: [],
+        };
+
+        for (const file of files) {
+            const img = new Image();
+            img.crossOrigin = "anonymous"; // Ensure the image is fetched with CORS
+            img.src = `/api/proxy?url=${encodeURIComponent(file.url)}`;
+            await new Promise((resolve) => {
+                img.onload = async () => {
+                    try {
+                        const predictions = await model.classify(img);
+                        console.log('Predictions for', file.url, ':', predictions); // Debug log
+                        const category = getCategory(predictions);
+                        newCategories[category].push(file);
+                        resolve();
+                    } catch (error) {
+                        console.error('Error classifying image:', error);
+                        resolve(); // Continue even if classification fails
+                    }
+                };
+                img.onerror = (error) => {
+                    console.error('Error loading image:', error);
+                    resolve(); // Continue even if image fails to load
+                };
+            });
+        }
+
+        console.log('Classified categories:', newCategories); // Debug log
+        setCategories(newCategories);
+    };
+
+    const getCategory = (predictions) => {
+        const labels = predictions.map((pred) => pred.className.toLowerCase());
+        if (labels.some((label) => label.includes('nature'))) return 'nature';
+        if (labels.some((label) => label.includes('portrait'))) return 'portrait';
+        if (labels.some((label) => label.includes('party'))) return 'party';
+        return 'others';
+    };
 
     const handleCategoryClick = (category) => {
         setActiveCategory(activeCategory === category ? null : category);
@@ -59,17 +127,12 @@ function Gallery() {
                 <div className="p-8 flex flex-col items-center overflow-y-auto">
                     {/* Category Row */}
                     <div className="flex justify-center space-x-6 mb-6 mt-4">
-                        {Object.keys(images).map((category) => (
+                        {Object.keys(categories).map((category) => (
                             <div
                                 key={category}
                                 className="relative w-32 h-32 border rounded-lg overflow-hidden shadow-md cursor-pointer flex items-center justify-center"
                                 onClick={() => handleCategoryClick(category)}
                             >
-                                <img
-                                    src={images[category][0].url}
-                                    alt={`${category} thumbnail`}
-                                    className="object-cover w-full h-full"
-                                />
                                 <div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-50">
                                     <span className="text-white font-bold capitalize">{category}</span>
                                 </div>
@@ -80,12 +143,17 @@ function Gallery() {
                     {/* Selected Category Images */}
                     {activeCategory && (
                         <div className="w-full max-w-4xl grid grid-cols-3 gap-4 mt-1">
-                            {images[activeCategory].map((file) => (
-                                <div key={file.cid} className="border rounded-lg overflow-hidden shadow-sm">
-                                    <img src={file.url} alt={`CID: ${file.cid}`} className="object-cover w-full h-full" />
-                                    <p className="p-2 text-center text-gray-500 text-xs">CID: {file.cid}</p>
-                                </div>
-                            ))}
+                            {categories[activeCategory].length > 0 ? (
+                                categories[activeCategory].map((file) => (
+                                    <div key={file._id} className="border rounded-lg overflow-hidden shadow-sm">
+                                        <img src={file.url} alt={`CID: ${file._id}`} className="object-cover w-full h-full" />
+                                        <p className="p-2 text-center text-gray-500 text-xs">CID: {file._id}</p>
+                                        <a href={file.url} target="_blank" rel="noopener noreferrer" className="block text-center text-blue-500 underline">View Image</a>
+                                    </div>
+                                ))
+                            ) : (
+                                <p className="text-center text-gray-500">No images available in this category.</p>
+                            )}
                         </div>
                     )}
                 </div>

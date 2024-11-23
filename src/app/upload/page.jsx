@@ -99,6 +99,15 @@ export default function Upload() {
             if (response.ok && data.url) {
                 setMessage(`File uploaded successfully: ${data.url}`);
                 setMessageType('success'); // Success message
+
+                // Save the URL to the database
+                await fetch('/api/save-url', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ url: data.url }),
+                });
             } else {
                 setMessage(data.error || 'Failed to upload file');
                 setMessageType('error'); // Error message
@@ -176,10 +185,10 @@ export default function Upload() {
                 {isUploading && (
                     <div className="mt-4 flex justify-center items-center">
                         <div className="h-8 w-8 border-4 rounded-full border-t-4 border-blue-500 animate-spin"
-                            style={{
-                                background: 'conic-gradient(blue 50%, white 50%)',
-                                borderColor: 'transparent', // Remove the border color to avoid conflict
-                            }}></div>
+                             style={{
+                                 background: 'conic-gradient(blue 50%, white 50%)',
+                                 borderColor: 'transparent', // Remove the border color to avoid conflict
+                             }}></div>
                     </div>
                 )}
 
