@@ -33,13 +33,13 @@ export async function POST(req) {
 
     console.log(
       'The file can be accessed by this URL:',
-      `https://storage.dragon.cere.network/${bucketId}/${uploadedFileUri.cid}`
+      `https://cdn.dragon.cere.network/${bucketId}/${uploadedFileUri.cid}`
     );
 
     await client.disconnect();
 
     return new Response(
-      JSON.stringify({ url: `https://storage.dragon.cere.network/${bucketId}/${uploadedFileUri.cid}` }),
+      JSON.stringify({ url: `https://cdn.dragon.cere.network/${bucketId}/${uploadedFileUri.cid}` }),
       {
         status: 200,
         headers: { 'Content-Type': 'application/json' },
